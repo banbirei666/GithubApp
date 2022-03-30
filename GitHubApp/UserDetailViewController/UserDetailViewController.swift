@@ -28,7 +28,7 @@ class UserDetailViewController: UIViewController {
     @IBOutlet weak var followingLabel: UILabel!
 
     // repository state label
-    @IBOutlet weak var noRepositoryLabel: UILabel!
+    @IBOutlet weak var repositoryFetchStateLabel: UILabel!
 
     // Navigation bar button
     var favoriteButton: UIBarButtonItem!
@@ -57,7 +57,7 @@ class UserDetailViewController: UIViewController {
         // Navigation bar title
         self.title = "Detail"
         
-        // Nabigation bar button
+        // Navigation bar button
         self.favoriteButton = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(favoriteButtonTapped(_:)))
         self.navigationItem.rightBarButtonItem = self.favoriteButton
         
@@ -103,25 +103,25 @@ class UserDetailViewController: UIViewController {
                 return
             }
             do {
-                let json = try JSONDecoder().decode(GHUser.self, from: data)
-                self.currentUser = json
+                let model = try JSONDecoder().decode(GHUser.self, from: data)
+                self.currentUser = model
                 let isFavorite: Bool? = UserDefaultsManager.shared.isUserFavorite(user: self.currentUser)
                 
-                self.userNameLabel.text = json.login
-                self.fullNameLabel.text = json.node_id
+                self.userNameLabel.text = model.login
+                self.fullNameLabel.text = model.node_id
                 
-                let url = URL(string: json.avatar_url)
+                let url = URL(string: model.avatar_url)
                 if url != nil {
                     self.userImageView.kf.setImage(with: url)
                 }
                 DispatchQueue.main.async {
-                    if json.followers != nil {
-                        self.followerLabel.text = "follower: \(json.followers!)"
+                    if model.followers != nil {
+                        self.followerLabel.text = "follower: \(model.followers!)"
                     }
-                    if json.following != nil {
+                    if model.following != nil {
                         
                     }
-                    self.followingLabel.text = "following: \(json.following!)"
+                    self.followingLabel.text = "following: \(model.following!)"
                     
                     if isFavorite != nil {
                         self.renderFavorite(isFavorite: isFavorite!)
@@ -140,6 +140,10 @@ class UserDetailViewController: UIViewController {
     // http request, fetch specific user's repository
     func fetchRepository(login: String) {
         
+        DispatchQueue.main.async {
+            self.repositoryFetchStateLabel.text = "Loading..."
+        }
+        
         let urlString = "\(AppConstant.GH_BASE_URL)/users/\(login)/repos"
         let headers: HTTPHeaders = ["Accept": "application/vnd.github.v3+json", "Authorization": "token \(SecretConstant.GH_AUTH_TOKEN)"]
         AF.request(urlString, method: .get, encoding: URLEncoding(destination: .queryString), headers: headers).response { response in
@@ -147,20 +151,34 @@ class UserDetailViewController: UIViewController {
                 return
             }
             do {
-                let json = try JSONDecoder().decode([GHRepository].self, from: data)
+                let model = try JSONDecoder().decode([GHRepository].self, from: data)
                 
                 // Exclude forking repositories
-                self.repositoryList = json.filter { !$0.fork }
+                self.repositoryList = model.filter { !$0.fork }
+                self.repositoryList.sort(by: { $0.stargazers_count > $1.stargazers_count })
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    self.noRepositoryLabel.isHidden = !self.repositoryList.isEmpty
+                    
+                    
+                    if self.repositoryList.isEmpty {
+                        self.repositoryFetchStateLabel.text = "No repository"
+                    }else {
+                        self.repositoryFetchStateLabel.isHidden = true
+
+                    }
                 }
                 
             } catch let error {
+                DispatchQueue.main.async {
+                    self.repositoryFetchStateLabel.text = "Error"
+                }
+
                 print(error)
             }
         }
         
     }
+    
+    
 }

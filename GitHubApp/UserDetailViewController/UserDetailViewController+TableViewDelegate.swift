@@ -29,7 +29,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
         }else {
             cell.descriptionLabel.isHidden = true
         }
-
+        cell.stargazersCountLabel.text = repoModel.stargazers_count.shortenCount()
         
         return cell
     }

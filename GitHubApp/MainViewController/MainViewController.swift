@@ -145,9 +145,9 @@ class MainViewController: UIViewController {
                 return
             }
             do {
-                let json = try JSONDecoder().decode(GHSearchUser.self, from: data)
+                let model = try JSONDecoder().decode(GHSearchUser.self, from: data)
 
-                NotificationCenter.default.post(name: .notifySearchUserList, object: json)
+                NotificationCenter.default.post(name: .notifySearchUserList, object: model)
                 
             } catch let error {
                 print(error)

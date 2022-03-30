@@ -18,5 +18,6 @@ struct GHRepository: Codable {
     let fork: Bool
     let language: String?
     let description: String?
+    let stargazers_count: Int
 }
 

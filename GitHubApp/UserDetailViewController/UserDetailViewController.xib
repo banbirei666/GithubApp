@@ -13,7 +13,7 @@
                 <outlet property="followerLabel" destination="9rR-bZ-dDQ" id="WSy-JM-j76"/>
                 <outlet property="followingLabel" destination="Jp3-Z1-Lot" id="Pxp-5C-L6Z"/>
                 <outlet property="fullNameLabel" destination="sQx-Nr-mp9" id="pAh-bu-Mhj"/>
-                <outlet property="noRepositoryLabel" destination="DCK-GI-94c" id="all-Cc-oJj"/>
+                <outlet property="repositoryFetchStateLabel" destination="DCK-GI-94c" id="bVJ-ng-OpZ"/>
                 <outlet property="tableView" destination="zSJ-eI-ptc" id="nSA-6Y-FnO"/>
                 <outlet property="userImageView" destination="nlM-Jp-xMM" id="QOa-fL-zTd"/>
                 <outlet property="userNameLabel" destination="sAd-Cz-eNN" id="BV3-b1-cGB"/>
@@ -132,7 +132,7 @@
                         <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RpF-hG-EGM">
                             <rect key="frame" x="0.0" y="220.5" width="414" height="597.5"/>
                             <subviews>
-                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No repository" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DCK-GI-94c">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DCK-GI-94c" userLabel="RepositoryFetchStateLabel">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="597.5"/>
                                     <accessibility key="accessibilityConfiguration">
                                         <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
